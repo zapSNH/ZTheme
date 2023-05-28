@@ -1,6 +1,6 @@
 # ZTheme
 A very cool and dark KSP Theme
-[![very neat](https://github.com/zapSNH/ZTheme/blob/main/Screenshot-5659.png "very neat")](https://github.com/zapSNH/ZTheme/blob/main/Screenshot-5659.png "very neat")
+[![very neat](https://github.com/zapSNH/ZTheme/blob/main/banner.png "very neat")](https://github.com/zapSNH/ZTheme/blob/main/banner.png "very neat")
 
 ## Dependencies
 [HUDReplacer](https://github.com/UltraJohn/HUDReplacer/releases "HUDReplacer") 
