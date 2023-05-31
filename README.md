@@ -8,12 +8,15 @@ Navball Not Included
 
 [Module Manager](https://github.com/sarbian/ModuleManager "Module Manager")
 
-## Other
+## (maybe) Frequently Asked Questions
 ### How Do I Get The Navball?
 - It's NavBallTextureChanger Updated but with Principia's navball.
   Just replace one of the builtin textures with Principia's navball (`ksp_plugin_adapter\assets\navball_compass.png`).
 
   Alternatively, you could take `navball_compass.png`, resize it to 512x256, rename it to `navball.png`, and put it in any of the ZTheme folders (except for the parent folder). 
+### I don't like what you did with X! Can you change it back?
+- The older variants can always be downloaded through older releases and it also may be in the [extras](https://github.com/zapSNH/ZTheme/wiki/Extras "extras") folder.
+
   
 ## Known Issues
  - Some textures are missing icons [#1](https://github.com/zapSNH/ZTheme/issues/1 "#1")
