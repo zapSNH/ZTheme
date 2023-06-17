@@ -10,10 +10,56 @@ Navball Not Included
 
 ## (maybe) Frequently Asked Questions
 ### How Do I Get The Navball?
-- It's NavBallTextureChanger Updated but with Principia's navball.
-  Just replace one of the builtin textures with Principia's navball (`ksp_plugin_adapter\assets\navball_compass.png`).
+The navball in the screenshot(s) is not included in this theme. There are also many more navballs that look nice with (or without) this theme.
 
-  Alternatively, you could take `navball_compass.png`, rename it to `navball.png`, and put it in any of the ZTheme folders (except for the parent folder). 
+There are two ways of changing the navball
+
+In these examples, I'll be using the [Principia navball](https://github.com/mockingbirdnest/Principia/blob/master/ksp_plugin_adapter/assets/navball_compass.png)
+
+
+### 1 - Using NavBallTextureChanger Updated
+
+NavBallTextureChanger Updated is a mod for KSP which... well... changes the navball texture.
+You can change the navball pretty easily in the UI with this mod.
+
+#### I. Install [NavBallTextureChanger](https://forum.kerbalspaceprogram.com/topic/200741-112x-navballtexturechanger-updated-now-with-ui/) Updated
+
+Installing NBTCU is pretty similar to installing ZTheme.
+
+#### II. Copy the texture into `GameData/NavBallTextureChanger/PluginData/Skins`
+
+I recommend to also copy the navball twice and naming one navballName_em.png if you want to create emissives for it.
+
+#### III.  Create the config file
+Here's an example of what a config file looks like. 
+
+If you're using the Principia navball then this should automatically work if you named the navballs `navball_compass.png` & `navball_compass_em.png`
+```
+NavballTextureChanger
+{
+	FILE_EMISSIVE
+	{
+		file = PluginData/Skins/navball_compass.png
+		emissive = PluginData/Skins/navball_compass_em.png
+		descr = NavballCompass
+	}
+}
+```
+Make sure the file ends with .cfg
+
+#### IV. Launch KSP and change the navball through the toolbar icon
+
+
+### 2 - Using HUDReplacer
+This method does not need any more mods as HUDReplacer is a dependency of ZTheme.
+
+This method also is pretty simplified so that people who don't know how to do method 1 can easily do this.
+
+#### I. Copy your texture to `GameData/ZTheme/PluginData` and rename it to `NavBall.png`
+...and you're done!
+
+If all goes well then you should see your magnificent navball that replaces the stinky old one. 
+
 ### I don't like what you did with X! Can you change it back?
 - The older variants can always be downloaded through older releases and it also may be in the [extras](https://github.com/zapSNH/ZTheme/wiki/Extras "extras") folder.
 
