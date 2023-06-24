@@ -61,9 +61,8 @@ This method also is pretty simplified so that people who don't know how to do me
 If all goes well then you should see your magnificent navball that replaces the stinky old one. 
 
 ### I don't like what you did with X! Can you change it back?
-- The older variants can always be downloaded through older releases and it also may be in the [extras](https://github.com/zapSNH/ZTheme/wiki/Extras "extras") folder.
+- The older variants can always be downloaded through older releases and it also may be in the [ZThemeExtras](https://github.com/zapSNH/ZThemeExtras "zthemeExtras").
 
-  
 ## Known Issues
  - Some textures are missing icons [#1](https://github.com/zapSNH/ZTheme/issues/1 "#1")
 
