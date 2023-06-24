@@ -1,6 +1,6 @@
 # ZTheme
-A very cool and dark KSP Theme
-[![very neat](https://github.com/zapSNH/ZTheme/blob/main/banner.png "very neat")](https://github.com/zapSNH/ZTheme/blob/main/banner.png "very neat")
+A very cool and dark KSP Theme based on HUDReplacer's example theme
+[![very neat](https://github.com/zapSNH/ZTheme-Files/blob/main/banner.png?raw=true "very neat")](https://github.com/zapSNH/ZTheme-Files/blob/main/banner.png?raw=true "very neat")
 Navball Not Included
 
 ## Dependencies
@@ -34,7 +34,7 @@ I recommend to also copy the navball twice and naming one navballName_em.png if 
 Here's an example of what a config file looks like. 
 
 If you're using the Principia navball then this should automatically work if you named the navballs `navball_compass.png` & `navball_compass_em.png`
-```
+```js
 NavballTextureChanger
 {
 	FILE_EMISSIVE
