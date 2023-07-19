@@ -70,9 +70,17 @@ If all goes well then you should see your magnificent navball that replaces the 
 ## Special Thanks
 UltraJohn for creating HUDReplacer
 
+
 Combatpigeon96 for being the one who made a [Reddit post](https://www.reddit.com/r/KerbalSpaceProgram/comments/12et06i/are_there_any_mods_that_change_the_look_of_the_ui/ "Reddit Post") which showed me HUDReplacer
 
+
 Nazalassa for being inspiration and also being the first to create a working dark theme (Go check out [Naztheme!](https://forum.kerbalspaceprogram.com/index.php?/topic/216234-112x-naztheme-an-alternate-theme-for-ksp/ "Naztheme!"))
+
+
+MrF0X and beik for being inspiration
+- Karbon UI: https://forum.kerbalspaceprogram.com/topic/195594-new-interface-ksp-karbon-ui/
+- beik's Flight HUD Redesign: https://forum.kerbalspaceprogram.com/topic/187152-experiment-on-a-possible-flight-hud-redesign-result/
+
 
 You for reading this README
 
