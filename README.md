@@ -4,7 +4,7 @@ A very cool and dark KSP Theme based on HUDReplacer's example theme
 Navball Not Included
 
 ## Dependencies
-[HUDReplacer](https://github.com/UltraJohn/HUDReplacer/releases "HUDReplacer") 
+[HUDReplacer](https://github.com/UltraJohn/HUDReplacer/releases "HUDReplacer") + its dependencies
 
 [Module Manager](https://github.com/sarbian/ModuleManager "Module Manager")
 
