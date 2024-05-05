@@ -8,6 +8,9 @@ Navball Not Included
 
 [Module Manager](https://github.com/sarbian/ModuleManager "Module Manager")
 
+(not needed but recommended)
+* [ZUI](https://github.com/zapSNH/zui) (KSP 2-like navball + other stuff (singular))
+
 ## (maybe) Frequently Asked Questions
 ### How Do I Get The Navball?
 The navball in the screenshot(s) is not included in this theme. There are also many more navballs that look nice with (or without) this theme.
