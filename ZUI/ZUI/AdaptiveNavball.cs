@@ -1,11 +1,13 @@
 ﻿using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
+using static Targeting;
 
 namespace ZUI {
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
 	public class AdaptiveNavball : MonoBehaviour {
 		internal static AdaptiveNavball Instance { get; private set; }
-		internal ConfigNode[] navballConfigs;
 		private string[] navballPaths = new string[] { null, null, null };
 		private bool[] navballExists = new bool[3];
 		private Texture2D navballTexture;
@@ -37,22 +39,25 @@ namespace ZUI {
 		}
 		private void LoadConfigs() {
 			UrlDir.UrlConfig[] ZUINodes = GameDatabase.Instance.GetConfigs(Constants.ZUI_NODE);
+			List<ConfigNode> allNavballConfigs = new List<ConfigNode>();
 			foreach (UrlDir.UrlConfig node in ZUINodes) {
-				navballConfigs = node.config.GetNodes(Constants.ZUINAVBALL_NODE);
-				foreach (ConfigNode config in navballConfigs) {
-					if (config.HasValue(Constants.NAVBALL_SURFACE)) {
-						Debug.Log("[ZUI] " + config.GetValue(Constants.NAVBALL_SURFACE));
-						navballPaths[0] = config.GetValue(Constants.NAVBALL_SURFACE);
-						navballExists[0] = true;
-					}
-					if (config.HasValue(Constants.NAVBALL_ORBIT)) {
-						navballPaths[1] = config.GetValue(Constants.NAVBALL_ORBIT);
-						navballExists[1] = true;
-					}
-					if (config.HasValue(Constants.NAVBALL_TARGET)) {
-						navballPaths[2] = config.GetValue(Constants.NAVBALL_TARGET);
-						navballExists[2] = true;
-					}
+				if (!node.config.HasNode(Constants.ZUINAVBALL_NODE)) continue;
+				ConfigNode[] navballConfigs = node.config.GetNodes(Constants.ZUINAVBALL_NODE);
+				navballConfigs = navballConfigs.OrderBy(c => int.Parse(c.GetValue(Constants.ADAPTIVE_NAVBALL_PRIORITY_CFG))).ToArray();
+				allNavballConfigs.AddRange(navballConfigs);
+			}
+			foreach (ConfigNode config in allNavballConfigs) {
+				if (config.HasValue(Constants.NAVBALL_SURFACE)) {
+					navballPaths[0] = config.GetValue(Constants.NAVBALL_SURFACE);
+					navballExists[0] = true;
+				}
+				if (config.HasValue(Constants.NAVBALL_ORBIT)) {
+					navballPaths[1] = config.GetValue(Constants.NAVBALL_ORBIT);
+					navballExists[1] = true;
+				}
+				if (config.HasValue(Constants.NAVBALL_TARGET)) {
+					navballPaths[2] = config.GetValue(Constants.NAVBALL_TARGET);
+					navballExists[2] = true;
 				}
 			}
 		}

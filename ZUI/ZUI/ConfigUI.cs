@@ -57,7 +57,6 @@ namespace ZUI {
 						ToggleConfig(selected, config);
 					},
 					windowWidth - (2 * paddingWindow) - (2 * paddingXSmall), buttonHeight);
-				button.tooltipText = "HAHAHAHAHAHHAHAA";
 				buttons.Add(button);
 			}
 
@@ -79,12 +78,18 @@ namespace ZUI {
 			configPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset(), TextAnchor.UpperCenter, scrollList, applyButton);
 
 			// Other Settings Page
-			DialogGUIToggle adaptiveNavballToggle = new DialogGUIToggle(() => ConfigManager.enableAdaptiveNavball, "Enable Adaptive Navball", 
+			// adaptive navball
+			List<DialogGUIBase> adaptiveNavballSection = new List<DialogGUIBase> {
+				CreateSettingsHeader("Adaptive Navball"),
+			};
+			DialogGUIToggle adaptiveNavballToggle = new DialogGUIToggle(() => ConfigManager.enableAdaptiveNavball, "Enable Adaptive Navball",
 				delegate (bool selected) {
 					ToggleAdaptiveNavball(selected);
-				});
+			});
+			adaptiveNavballToggle.tooltipText = "Enables KSP 2-style adaptive navball";
+			adaptiveNavballSection.Add(adaptiveNavballToggle);
 
-			settingsPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset((int)paddingRegular, (int)paddingRegular, (int)paddingRegular, (int)paddingRegular), TextAnchor.UpperCenter, adaptiveNavballToggle);
+			settingsPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset((int)paddingRegular, (int)paddingRegular, (int)paddingRegular, (int)paddingRegular), TextAnchor.UpperCenter, adaptiveNavballSection.ToArray());
 
 			// tab buttons
 			DialogGUIToggleButton configTab = new DialogGUIToggleButton(() => currentTab == ZUITab.Configuration,
@@ -184,6 +189,9 @@ namespace ZUI {
 			if (tab == currentTab) return;
 			currentTab = tab;
 			Debug.Log($"[ZUI] current tab: {tab}");
+		}
+		private static DialogGUIBox CreateSettingsHeader(string title) {
+			return new DialogGUIBox(title, -1f, 18f);
 		}
 	}
 }
