@@ -42,10 +42,9 @@ namespace ZUI {
 			List<ConfigNode> allNavballConfigs = new List<ConfigNode>();
 			foreach (UrlDir.UrlConfig node in ZUINodes) {
 				if (!node.config.HasNode(Constants.ZUINAVBALL_NODE)) continue;
-				ConfigNode[] navballConfigs = node.config.GetNodes(Constants.ZUINAVBALL_NODE);
-				navballConfigs = navballConfigs.OrderBy(c => int.Parse(c.GetValue(Constants.ADAPTIVE_NAVBALL_PRIORITY_CFG))).ToArray();
-				allNavballConfigs.AddRange(navballConfigs);
+				allNavballConfigs.AddRange(node.config.GetNodes(Constants.ZUINAVBALL_NODE));
 			}
+			allNavballConfigs = allNavballConfigs.OrderBy(c => int.Parse(c.GetValue(Constants.ADAPTIVE_NAVBALL_PRIORITY_CFG))).ToList();
 			foreach (ConfigNode config in allNavballConfigs) {
 				if (config.HasValue(Constants.NAVBALL_SURFACE)) {
 					navballPaths[0] = config.GetValue(Constants.NAVBALL_SURFACE);
