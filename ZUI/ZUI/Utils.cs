@@ -1,5 +1,6 @@
 ﻿
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace ZUI {
 	internal static class Constants {
@@ -35,7 +36,7 @@ namespace ZUI {
 
 		internal const string TRANSLATE_CFG = "translate";
 		internal const string ROTATE_CFG = "rotate";
-		//internal const string SCALE_CFG = "scale";
+		internal const string SCALE_CFG = "scale";
 
 		internal const string ADAPTIVE_NAVBALL_ENABLED_CFG = "adaptiveNavballEnabled";
 		internal const string ADAPTIVE_NAVBALL_PRIORITY_CFG = "priority";

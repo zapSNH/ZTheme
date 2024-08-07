@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using static Targeting;
 
 namespace ZUI {
 	[KSPAddon(KSPAddon.Startup.Flight, false)]

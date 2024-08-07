@@ -12,7 +12,7 @@ namespace ZUI {
 		internal List<bool> relativeTransform = new List<bool>();
 		public List<Vector3> translateAmounts = new List<Vector3>();
 		public List<Vector3> rotateAmounts = new List<Vector3>(); // rotation will always non-relative
-		//public List<Vector3> scaleAmounts = new List<Vector3>(); // merely adding the code to handle scale without doing anything in the cfg files seems to break the rotation code
+		public List<Vector3> scaleAmounts = new List<Vector3>();
 
 		private bool debugMode = false;
 
@@ -25,7 +25,6 @@ namespace ZUI {
 			}
 			GetTransform();
 			SetTransform();
-
 		}
 		internal void GetTransform() {
 			UrlDir.UrlConfig[] ZUINodes = GameDatabase.Instance.GetConfigs(Constants.ZUI_NODE);
@@ -69,7 +68,7 @@ namespace ZUI {
 			if (gameObject != null) {
 				Vector3 translate = Vector3.negativeInfinity;
 				Vector3 rotate = Vector3.negativeInfinity;
-				//Vector3 scale = Vector3.negativeInfinity;
+				Vector3 scale = Vector3.negativeInfinity;
 				bool isRelative = false;
 
 				if (config.HasValue(Constants.RELATIVE_TRANSFORM_CFG)) {
@@ -81,15 +80,15 @@ namespace ZUI {
 				if (config.HasValue(Constants.ROTATE_CFG)) {
 					config.TryGetValue(Constants.ROTATE_CFG, ref rotate);
 				}
-				//if (config.config.HasValue(Constants.SCALE_CFG)) {
-				//	config.config.TryGetValue(Constants.SCALE_CFG, ref scale);
-				//}
+				if (config.HasValue(Constants.SCALE_CFG)) {
+					config.TryGetValue(Constants.SCALE_CFG, ref scale);
+				}
 
 				transformObjects.Add(gameObject);
 				rotateAmounts.Add(rotate);
 				translateAmounts.Add(translate);
 				relativeTransform.Add(isRelative);
-				//scaleAmounts.Add(scale);
+				scaleAmounts.Add(scale);
 				Debug.Log($"[ZUI] target: {gameObject.name} | translate: {translate} | rotate: {rotate}" /* | scale: {scale}"*/);
 				return true;
 			} else {
@@ -99,21 +98,28 @@ namespace ZUI {
 		internal void SetTransform() {
 			int i = 0;
 			foreach (GameObject gameObject in transformObjects) {
-				if (gameObject != null) {
-					if (relativeTransform[i]) {
-						if (translateAmounts[i] != Vector3.negativeInfinity)
-							gameObject.transform.localPosition += translateAmounts[i];
-						//if (scaleAmounts[i] != Vector3.negativeInfinity)
-						//	gameObject.transform.localScale = Vector3.Scale(scaleAmounts[i], gameObject.transform.localScale);
-					} else {
-						if (translateAmounts[i] != Vector3.negativeInfinity)
-							gameObject.transform.localPosition = translateAmounts[i];
-						//if (scaleAmounts[i] != Vector3.negativeInfinity)
-						//	gameObject.transform.localScale = scaleAmounts[i];
-					}
-					gameObject.transform.localEulerAngles = rotateAmounts[i];
-				}
+				SetGameObjectTransform(gameObject, relativeTransform[i], translateAmounts[i], rotateAmounts[i], scaleAmounts[i]);
 				i++;
+			}
+		}
+		public void SetGameObjectTransform(GameObject gameObject, bool relative, Vector3 translate, Vector3 rotate, Vector3 scale) {
+			if (gameObject != null) {
+				if (relative) {
+					if (!translate.Equals(Vector3.negativeInfinity)) {
+						gameObject.transform.localPosition += translate;
+					}
+					if (!scale.Equals(Vector3.negativeInfinity)) {
+						gameObject.transform.localScale = Vector3.Scale(scale, gameObject.transform.localScale);
+					}
+				} else {
+					if (!translate.Equals(Vector3.negativeInfinity)) {
+						gameObject.transform.localPosition = translate;
+					}
+					if (!scale.Equals(Vector3.negativeInfinity)) {
+						gameObject.transform.localScale = scale;
+					}
+				}
+				gameObject.transform.localEulerAngles = rotate;
 			}
 		}
 	}
