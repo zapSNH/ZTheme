@@ -51,6 +51,7 @@ namespace ZUI {
 			List<ZUIConfig> configs = ConfigManager.GetConfigs();
 			buttons.Add(new DialogGUIContentSizer(ContentSizeFitter.FitMode.Unconstrained, ContentSizeFitter.FitMode.PreferredSize, true));
 			foreach (ZUIConfig config in configs) {
+				Debug.Log("[ZUI] " + config.name + ": " + ConfigManager.GetEnabledConfigs().Contains(config));
 				DialogGUIToggleButton button = new DialogGUIToggleButton(ConfigManager.GetEnabledConfigs().Contains(config),
 					config.name.CamelCaseToHumanReadable(),
 					delegate (bool selected) {
@@ -91,7 +92,7 @@ namespace ZUI {
 			settingsSections.Add(throttleThumbToggle);
 			DialogGUIToggle geeThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], "Enable gee thumb", ToggleGeeThumb);
 			settingsSections.Add(geeThumbToggle);
-			DialogGUIToggle throttleThumbDragToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], "Allow the throttle thumb to set the throttle", ToggleThrottleThumbDrag);
+			DialogGUIToggle throttleThumbDragToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG], "Allow the throttle thumb to set the throttle", ToggleThrottleThumbDrag);
 			settingsSections.Add(throttleThumbDragToggle);
 
 			settingsPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset((int)paddingRegular, (int)paddingRegular, (int)paddingRegular, (int)paddingRegular), TextAnchor.UpperCenter, settingsSections.ToArray());
@@ -149,17 +150,17 @@ namespace ZUI {
 		}
 		private static void ToggleThrottleThumb(bool active) {
 			ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG] = active;
-			GaugeThumbs.Instance.ToggleThrottleThumb(active);
+			if (GaugeThumbs.Instance != null) GaugeThumbs.Instance.ToggleThrottleThumb(active);
 			ConfigManager.SaveConfigOverrides();
 		}
 		private static void ToggleGeeThumb(bool active) {
 			ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG] = active;
-			GaugeThumbs.Instance.ToggleGeeThumb(active);
+			if (GaugeThumbs.Instance != null) GaugeThumbs.Instance.ToggleGeeThumb(active);
 			ConfigManager.SaveConfigOverrides();
 		}
 		private static void ToggleThrottleThumbDrag(bool active) {
 			ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] = active;
-			GaugeThumbs.Instance.SetThrottleThumbDrag(active);
+			if (GaugeThumbs.Instance != null) GaugeThumbs.Instance.SetThrottleThumbDrag(active);
 			ConfigManager.SaveConfigOverrides();
 		}
 		private static void ApplyConfigWindow() {

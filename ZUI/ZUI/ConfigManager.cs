@@ -59,24 +59,27 @@ namespace ZUI {
 			// load config options (whether or not a config is enabled)
 			// this is a separate loop so that all the configs are loaded before we apply the options
 			foreach (ConfigNode configOption in configOptions) {
-				if (alreadyHasOptionsNode) break;
-				alreadyHasOptionsNode = true;
 				Debug.Log($"[ZUI] priority: {configOption.GetValue(Constants.ZUICONFIGOPTION_PRIORITY_CFG)}");
 				if (!configOption.HasValue(Constants.ZUICONFIGOPTION_ENABLED_CFG)) {
 					Debug.Log($"[ZUI] Config option does not have '{Constants.ZUICONFIGOPTION_ENABLED_CFG}'. There is nothing to enable.");
 				}
-				string[] ZUIConfigOptionValues = configOption.GetValue(Constants.ZUICONFIGOPTION_ENABLED_CFG).Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-				foreach (string configValue in ZUIConfigOptionValues) {
-					if (currentConfigs.Exists(c => c.name == configValue)) {
-						EnableConfig(currentConfigs.Find(c => c.name == configValue));
-					} else {
-						Debug.Log($"[ZUI] '{configValue}' does not exist.");
+				if (!alreadyHasOptionsNode) {
+					string[] ZUIConfigOptionValues = configOption.GetValue(Constants.ZUICONFIGOPTION_ENABLED_CFG).Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+					foreach (string configValue in ZUIConfigOptionValues) {
+						alreadyHasOptionsNode = true;
+						if (currentConfigs.Exists(c => c.name == configValue)) {
+							Debug.Log($"[ZUI] enabling '{configValue}'");
+							EnableConfig(currentConfigs.Find(c => c.name == configValue));
+						} else {
+							Debug.Log($"[ZUI] '{configValue}' does not exist.");
+						}
 					}
 				}
 				foreach (ConfigNode.Value value in configOption.values) {
 					if (value.name == Constants.ZUICONFIGOPTION_PRIORITY_CFG || value.name == Constants.ZUICONFIGOPTION_ENABLED_CFG) continue;
+					Debug.Log(value.name);
 					if (bool.TryParse(value.value, out bool boolValue)) {
-						options.Add(value.name, boolValue);
+						if (!options.ContainsKey(value.name)) options.Add(value.name, boolValue);
 					}
 				}
 			}

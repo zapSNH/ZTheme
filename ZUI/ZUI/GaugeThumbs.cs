@@ -3,6 +3,7 @@ using SaveUpgradePipeline;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static ZUI.GaugeThumbs;
 
 namespace ZUI {
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
@@ -14,6 +15,7 @@ namespace ZUI {
 		private GeeGauge geeGauge;
 		private TextMeshProUGUI throttleText;
 		private TextMeshProUGUI geeText;
+		private float currentSpacing = 0;
 
 		public struct ThumbImage {
 			public string name;
@@ -71,15 +73,18 @@ namespace ZUI {
 		}
 		public void SetThrottleThumbDrag(bool draggable) {
 			ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] = draggable;
-			ToggleThrottleThumb(ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG]);
+			if (ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG]) ToggleThrottleThumb(true);
 		}
 
 		public void ToggleThrottleThumb(bool active) {
+			ThumbImage thumbImage = ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] ? compactDragThumb : compactThumb;
 			if (throttleThumbObject != null) {
 				Destroy(throttleThumbObject);
+				autopilotModesGObj.transform.localPosition += new Vector3(currentSpacing, 0, 0);
+				currentSpacing = 0;
 			}
 			if (active) {
-				throttleThumbObject = CreateGaugeThumb(throttleGauge.gameObject, ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] ? compactDragThumb : compactThumb, out throttleText, true);
+				throttleThumbObject = CreateGaugeThumb(throttleGauge.gameObject, thumbImage, out throttleText, true);
 			}
 		}
 		public void ToggleGeeThumb(bool active) {
@@ -93,7 +98,10 @@ namespace ZUI {
 
 		private GameObject CreateGaugeThumb(GameObject gaugeObject, ThumbImage thumbImage, out TextMeshProUGUI gaugeText, bool leftSide = false) {
 			// autopilot modes padding
-			if (leftSide) autopilotModesGObj.transform.localPosition -= new Vector3(thumbImage.sidePadding, 0, 0);
+			if (leftSide) {
+				currentSpacing = thumbImage.sidePadding;
+				autopilotModesGObj.transform.localPosition -= new Vector3(currentSpacing, 0, 0);
+			}
 
 			// instantiate thumb from gauge
 			GameObject gaugeThumb = Instantiate(gaugeObject, gaugeObject.transform.parent);
@@ -111,6 +119,7 @@ namespace ZUI {
 			// dragging
 			if (thumbImage.draggable) {
 				gaugeThumbVisual.AddComponent<ThumbDrag>();
+				gaugeThumbVisual.AddComponent<Button>(); // adds effects when mouse is hovering/clicking
 			}
 
 			// create text
