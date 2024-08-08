@@ -32,7 +32,7 @@ namespace ZUI {
 		}
 
 		//private ThumbImage regularDragThumb = new ThumbImage(Constants.ZUI_FOLDER + "Assets/throttle-thumb", Vector3.zero, new Vector3(-24, 0, 0), Vector3.zero, 28, 128, true);
-		private ThumbImage compactDragThumb = new ThumbImage(Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.5, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true);
+		private ThumbImage compactDragThumb = new ThumbImage(Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.5f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true);
 		private ThumbImage compactThumb = new ThumbImage(Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 24, false);
 
 		private float thumbScale = 1.3f;
