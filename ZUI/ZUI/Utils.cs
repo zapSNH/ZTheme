@@ -47,6 +47,10 @@ namespace ZUI {
 		internal const string THROTTLE_GAUGE_GOBJ_NAME = "ThrottleGaugePointer";
 		internal const string GEE_GAUGE_GOBJ_NAME = "GeeGaugePointer";
 
+		internal const string GEE_THUMB_ENABLED_CFG = "enableGeeThumb";
+		internal const string THROTTLE_THUMB_ENABLED_CFG = "enableThrottleThumb";
+		internal const string THROTTLE_THUMB_DRAG_ENABLED_CFG = "enableThrottleThumbDragging";
+
 		internal const string TOOLBAR_BUTTON_ENABLED = "toolbarButtonEnabled";
 	}
 	internal static class Extensions {

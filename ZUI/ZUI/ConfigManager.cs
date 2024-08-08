@@ -16,7 +16,7 @@ namespace ZUI {
 
 		private static int overridePriority = 16384;
 
-		internal static bool enableAdaptiveNavball = true;
+		internal static Dictionary<string, bool> options = new Dictionary<string, bool>();
 
 		public void Awake() {
 			if (Instance == null || Instance == this) {
@@ -64,10 +64,6 @@ namespace ZUI {
 				Debug.Log($"[ZUI] priority: {configOption.GetValue(Constants.ZUICONFIGOPTION_PRIORITY_CFG)}");
 				if (!configOption.HasValue(Constants.ZUICONFIGOPTION_ENABLED_CFG)) {
 					Debug.Log($"[ZUI] Config option does not have '{Constants.ZUICONFIGOPTION_ENABLED_CFG}'. There is nothing to enable.");
-					continue;
-				}
-				if (configOption.HasValue(Constants.ADAPTIVE_NAVBALL_ENABLED_CFG)) {
-					enableAdaptiveNavball = bool.Parse(configOption.GetValue(Constants.ADAPTIVE_NAVBALL_ENABLED_CFG));
 				}
 				string[] ZUIConfigOptionValues = configOption.GetValue(Constants.ZUICONFIGOPTION_ENABLED_CFG).Replace(" ", "").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 				foreach (string configValue in ZUIConfigOptionValues) {
@@ -75,6 +71,12 @@ namespace ZUI {
 						EnableConfig(currentConfigs.Find(c => c.name == configValue));
 					} else {
 						Debug.Log($"[ZUI] '{configValue}' does not exist.");
+					}
+				}
+				foreach (ConfigNode.Value value in configOption.values) {
+					if (value.name == Constants.ZUICONFIGOPTION_PRIORITY_CFG || value.name == Constants.ZUICONFIGOPTION_ENABLED_CFG) continue;
+					if (bool.TryParse(value.value, out bool boolValue)) {
+						options.Add(value.name, boolValue);
 					}
 				}
 			}
@@ -130,7 +132,9 @@ namespace ZUI {
 			}
 			ZUIConfigOptionsNode.AddValue(Constants.ZUICONFIGOPTION_ENABLED_CFG, string.Join(", ", enabledConfigs));
 			ZUIConfigOptionsNode.AddValue(Constants.ZUICONFIGOPTION_PRIORITY_CFG, overridePriority);
-			ZUIConfigOptionsNode.AddValue(Constants.ADAPTIVE_NAVBALL_ENABLED_CFG, enableAdaptiveNavball);
+			foreach (KeyValuePair<string, bool> kvp in options) {
+				ZUIConfigOptionsNode.AddValue(kvp.Key, kvp.Value);
+			}
 			ZUINode.AddNode(ZUIConfigOptionsNode);
 			overridesFile.AddNode(ZUINode);
 			overridesFile.Save(KSPUtil.ApplicationRootPath + USER_OVERRIDE_SAVE_LOCATION, "Config overrides set in-game. Delete this file to remove overrides.");

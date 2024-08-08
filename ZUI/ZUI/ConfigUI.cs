@@ -79,17 +79,22 @@ namespace ZUI {
 
 			// Other Settings Page
 			// adaptive navball
-			List<DialogGUIBase> adaptiveNavballSection = new List<DialogGUIBase> {
+			List<DialogGUIBase> settingsSections = new List<DialogGUIBase> {
 				CreateSettingsHeader("Adaptive Navball"),
 			};
-			DialogGUIToggle adaptiveNavballToggle = new DialogGUIToggle(() => ConfigManager.enableAdaptiveNavball, "Enable Adaptive Navball",
-				delegate (bool selected) {
-					ToggleAdaptiveNavball(selected);
-			});
+			DialogGUIToggle adaptiveNavballToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.ADAPTIVE_NAVBALL_ENABLED_CFG], "Enable adaptive navball", ToggleAdaptiveNavball);
 			adaptiveNavballToggle.tooltipText = "Enables KSP 2-style adaptive navball";
-			adaptiveNavballSection.Add(adaptiveNavballToggle);
+			settingsSections.Add(adaptiveNavballToggle);
 
-			settingsPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset((int)paddingRegular, (int)paddingRegular, (int)paddingRegular, (int)paddingRegular), TextAnchor.UpperCenter, adaptiveNavballSection.ToArray());
+			settingsSections.Add(CreateSettingsHeader("Navball gauge thumbs"));
+			DialogGUIToggle throttleThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG], "Enable throttle thumb", ToggleThrottleThumb);
+			settingsSections.Add(throttleThumbToggle);
+			DialogGUIToggle geeThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], "Enable gee thumb", ToggleGeeThumb);
+			settingsSections.Add(geeThumbToggle);
+			DialogGUIToggle throttleThumbDragToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], "Allow the throttle thumb to set the throttle", ToggleThrottleThumbDrag);
+			settingsSections.Add(throttleThumbDragToggle);
+
+			settingsPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset((int)paddingRegular, (int)paddingRegular, (int)paddingRegular, (int)paddingRegular), TextAnchor.UpperCenter, settingsSections.ToArray());
 
 			// tab buttons
 			DialogGUIToggleButton configTab = new DialogGUIToggleButton(() => currentTab == ZUITab.Configuration,
@@ -132,7 +137,7 @@ namespace ZUI {
 			}
 		}
 		private static void ToggleAdaptiveNavball(bool active) {
-			ConfigManager.enableAdaptiveNavball = active;
+			ConfigManager.options[Constants.ADAPTIVE_NAVBALL_ENABLED_CFG] = active;
 			if (AdaptiveNavball.Instance != null) {
 				if (active) {
 					AdaptiveNavball.Instance.EnableAdaptiveNavball();
@@ -140,6 +145,21 @@ namespace ZUI {
 					AdaptiveNavball.Instance.DisableAdaptiveNavball();
 				}
 			}
+			ConfigManager.SaveConfigOverrides();
+		}
+		private static void ToggleThrottleThumb(bool active) {
+			ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG] = active;
+			GaugeThumbs.Instance.ToggleThrottleThumb(active);
+			ConfigManager.SaveConfigOverrides();
+		}
+		private static void ToggleGeeThumb(bool active) {
+			ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG] = active;
+			GaugeThumbs.Instance.ToggleGeeThumb(active);
+			ConfigManager.SaveConfigOverrides();
+		}
+		private static void ToggleThrottleThumbDrag(bool active) {
+			ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] = active;
+			GaugeThumbs.Instance.SetThrottleThumbDrag(active);
 			ConfigManager.SaveConfigOverrides();
 		}
 		private static void ApplyConfigWindow() {

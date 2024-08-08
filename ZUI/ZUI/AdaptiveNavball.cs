@@ -17,7 +17,6 @@ namespace ZUI {
 		public void Start() {
 			if (Instance == null || Instance == this) {
 				Instance = this;
-				DontDestroyOnLoad(gameObject);
 			} else {
 				Destroy(gameObject);
 				return;
@@ -32,7 +31,7 @@ namespace ZUI {
 				}
 			}
 			Debug.Log("[ZUI] NavBall Texture Paths: Surface: " + (navballPaths[0] ?? "None") + " | Orbit: " + (navballPaths[1] ?? "None") + " | Target:" + (navballPaths[2] ?? "None"));
-			if (!ConfigManager.enableAdaptiveNavball) return;
+			if (!ConfigManager.options[Constants.ADAPTIVE_NAVBALL_ENABLED_CFG]) return;
 			ChangeNavball(new FlightGlobals.SpeedDisplayModes());
 			GameEvents.onSetSpeedMode.Add(ChangeNavball);
 		}
