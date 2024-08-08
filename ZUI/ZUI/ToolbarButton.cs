@@ -8,7 +8,7 @@ namespace ZUI {
 		private Texture configTexture;
 		private ApplicationLauncherButton toolbarButton;
 
-		private const string CONFIG_TEXTURE_PATH = "999_ZUI/Assets/zui_config"; // icon
+		private const string CONFIG_TEXTURE_PATH = Constants.ZUI_FOLDER + "Assets/zui_config"; // icon
 
 		public void Awake() {
 			if (!ToolbarButtonEnabled()) return;

@@ -1,9 +1,7 @@
-﻿
-using System.Text.RegularExpressions;
-using UnityEngine;
+﻿using System.Text.RegularExpressions;
 
 namespace ZUI {
-	internal static class Constants {
+	internal static partial class Constants {
 		internal const string GAMEDATA_FOLDER = "GameData/";
 		internal const string ZUI_FOLDER = "999_ZUI/";
 		internal const string MOD_FOLDER = GAMEDATA_FOLDER + ZUI_FOLDER;
@@ -45,6 +43,10 @@ namespace ZUI {
 		internal const string NAVBALL_TARGET = "navballTarget";
 		internal const string NAVBALL_TEXTURE = "NavBall";
 
+		internal const string AUTOPILOT_MODES_GOBJ_NAME = "AutopilotModes";
+		internal const string THROTTLE_GAUGE_GOBJ_NAME = "ThrottleGaugePointer";
+		internal const string GEE_GAUGE_GOBJ_NAME = "GeeGaugePointer";
+
 		internal const string TOOLBAR_BUTTON_ENABLED = "toolbarButtonEnabled";
 	}
 	internal static class Extensions {
@@ -65,5 +67,11 @@ namespace ZUI {
 				"$1 $2"
 			);
 		}
+		// https://discussions.unity.com/t/re-map-a-number-from-one-range-to-another/465623/23
+		/// <summary>
+		/// Returns the result of a non-clamping linear remapping of a value x from [from.min, from.max] to [to.min, to.max].
+		/// </summary>
+		internal static float Remap(this float value, (float min, float max) from, (float min, float max) to)
+			=> (value - from.min) / (from.max - from.min) * (to.max - to.min) + to.min;
 	}
 }
