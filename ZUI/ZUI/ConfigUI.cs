@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using KSP.Localization;
 
 namespace ZUI {
 	// TODO: l10n
@@ -53,7 +54,7 @@ namespace ZUI {
 			foreach (ZUIConfig config in configs) {
 				Debug.Log("[ZUI] " + config.name + ": " + ConfigManager.GetEnabledConfigs().Contains(config));
 				DialogGUIToggleButton button = new DialogGUIToggleButton(ConfigManager.GetEnabledConfigs().Contains(config),
-					config.name.CamelCaseToHumanReadable(),
+					config.localizedName,
 					delegate (bool selected) {
 						ToggleConfig(selected, config);
 					},
@@ -72,7 +73,7 @@ namespace ZUI {
 				buttons.ToArray()));
 
 			// apply button
-			DialogGUIButton applyButton = new DialogGUIButton("Apply",
+			DialogGUIButton applyButton = new DialogGUIButton(Localizer.Format("#autoLOC_ZUI_ConfigUI_Apply"),
 				ApplyConfigWindow,
 				windowWidth - (2 * paddingRegular), buttonHeight, false);
 
@@ -82,21 +83,21 @@ namespace ZUI {
 			// adaptive navball
 			List<DialogGUIBase> settingsSections = new List<DialogGUIBase> {
 				new DialogGUIContentSizer(ContentSizeFitter.FitMode.Unconstrained, ContentSizeFitter.FitMode.PreferredSize, true),
-				CreateSettingsHeader("Adaptive Navball"),
+				CreateSettingsHeader(Localizer.Format("#autoLOC_ZUI_ConfigUI_AdaptiveNavball_header")),
 			};
-			DialogGUIToggle adaptiveNavballToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.ADAPTIVE_NAVBALL_ENABLED_CFG], "Enable adaptive navball", ToggleAdaptiveNavball);
-			adaptiveNavballToggle.tooltipText = "Enables KSP 2-style adaptive navball";
+			DialogGUIToggle adaptiveNavballToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.ADAPTIVE_NAVBALL_ENABLED_CFG], Localizer.Format("#autoLOC_ZUI_ConfigUI_EnableAdaptiveNavball"), ToggleAdaptiveNavball);
+			adaptiveNavballToggle.tooltipText = Localizer.Format("#autoLOC_ZUI_ConfigUI_EnableAdaptiveNavball_tooltip");
 			settingsSections.Add(adaptiveNavballToggle);
 
-			settingsSections.Add(CreateSettingsHeader("Navball gauge thumbs"));
-			DialogGUIToggle throttleThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG], "Enable throttle thumb", ToggleThrottleThumb);
-			throttleThumbToggle.tooltipText = "Displays a thumb which shows the current throttle percent next to the throttle gauge";
+			settingsSections.Add(CreateSettingsHeader(Localizer.Format("#autoLOC_ZUI_ConfigUI_GaugeThumbs_header")));
+			DialogGUIToggle throttleThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG], Localizer.Format("#autoLOC_ZUI_ConfigUI_EnableThrottleThumb"), ToggleThrottleThumb);
+			throttleThumbToggle.tooltipText = Localizer.Format("#autoLOC_ZUI_ConfigUI_EnableThrottleThumb_tooltip");
 			settingsSections.Add(throttleThumbToggle);
-			DialogGUIToggle geeThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], "Enable g-force thumb", ToggleGeeThumb);
-			geeThumbToggle.tooltipText = "Displays a thumb which shows the g-force value next to the g-force gauge";
+			DialogGUIToggle geeThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], Localizer.Format("#autoLOC_ZUI_ConfigUI_EnableGForceThumb"), ToggleGeeThumb);
+			geeThumbToggle.tooltipText = Localizer.Format("#autoLOC_ZUI_ConfigUI_EnableGForceThumb_tooltip");
 			settingsSections.Add(geeThumbToggle);
-			DialogGUIToggle throttleThumbDragToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG], "Allow the throttle thumb to set the throttle", ToggleThrottleThumbDrag);
-			throttleThumbDragToggle.tooltipText = "Allows the throttle thumb to control thr throttle via mouse drag or mouse scroll";
+			DialogGUIToggle throttleThumbDragToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG], Localizer.Format("#autoLOC_ZUI_ConfigUI_AllowThrottleThumbDrag"), ToggleThrottleThumbDrag);
+			throttleThumbDragToggle.tooltipText = Localizer.Format("#autoLOC_ZUI_ConfigUI_AllowThrottleThumbDrag_tooltip");
 			settingsSections.Add(throttleThumbDragToggle);
 
 			DialogGUIScrollList optionsScrollList = new DialogGUIScrollList(Vector2.one,
@@ -112,14 +113,14 @@ namespace ZUI {
 
 			// tab buttons
 			DialogGUIToggleButton configTab = new DialogGUIToggleButton(() => currentTab == ZUITab.Configuration,
-				"Configuration",
+				Localizer.Format("#autoLOC_ZUI_ConfigUI_ConfigTab"),
 				delegate (bool selected) {
 					if (selected) SetTab(ZUITab.Configuration);
 				},
 				(windowWidth / 2) - (2 * paddingRegular), buttonHeight
 			);
 			DialogGUIToggleButton otherSettingsTab = new DialogGUIToggleButton(() => currentTab == ZUITab.OtherSettings,
-				"Other Settings",
+				Localizer.Format("#autoLOC_ZUI_ConfigUI_OtherSettingsTab"),
 				delegate (bool selected) {
 					if (selected) SetTab(ZUITab.OtherSettings);
 				},
@@ -135,7 +136,7 @@ namespace ZUI {
 			popupDialog = PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
 				new MultiOptionDialog("ZUIConfigWindow",
 					"",
-					"ZUI Config Options",
+					Localizer.Format("#autoLOC_ZUI_ConfigUI_title"),
 					HighLogic.UISkin,
 					new Rect(0.5f, 0.5f, windowWidth, windowHeight),
 					new DialogGUIBase[] { tabContainer, configPageBox, settingsPageBox } ),
@@ -181,13 +182,13 @@ namespace ZUI {
 				List<string> requireSceneReload = changedConfigs.Where(c => c.requireSceneReload).ToList().ConvertAll(c => c.name.CamelCaseToHumanReadable());
 				List<string> requireRestart = changedConfigs.Where(c => c.requireRestart).ToList().ConvertAll(c => c.name.CamelCaseToHumanReadable());
 				List<DialogGUIBase> container = new List<DialogGUIBase>();
-				DialogGUIButton okButton = new DialogGUIButton("OK", ApplyConfigs, windowWidth - (2 * paddingRegular), buttonHeight, true);
+				DialogGUIButton okButton = new DialogGUIButton(Localizer.Format("#autoLOC_ZUI_ConfigUI_ok"), ApplyConfigs, windowWidth - (2 * paddingRegular), buttonHeight, true);
 				if (requireSceneReload.Count != 0) {
-					DialogGUILabel needSceneReloadBox = new DialogGUILabel("need a scene reload to fully apply:\n\t" + string.Join("\n\t", requireSceneReload), windowWidth - (2 * paddingWindow) - (2 * paddingRegular));
+					DialogGUILabel needSceneReloadBox = new DialogGUILabel(Localizer.Format("#autoLOC_ZUI_ConfigUI_NeedSceneReload") + "\n\t" + string.Join("\n\t", requireSceneReload), windowWidth - (2 * paddingWindow) - (2 * paddingRegular));
 					container.Add(needSceneReloadBox);
 				}
 				if (requireRestart.Count != 0) {
-					DialogGUILabel needRestartBox = new DialogGUILabel("need a game restart to fully apply:\n\t" + string.Join("\n\t", requireRestart), windowWidth - (2 * paddingWindow) - (2 * paddingRegular));
+					DialogGUILabel needRestartBox = new DialogGUILabel(Localizer.Format("#autoLOC_ZUI_ConfigUI_NeedGameRestart") + "\n\t" + string.Join("\n\t", requireRestart), windowWidth - (2 * paddingWindow) - (2 * paddingRegular));
 					container.Add(needRestartBox);
 				}
 				container.Add(okButton);
@@ -199,7 +200,7 @@ namespace ZUI {
 				changedConfigs.Clear();
 				applyNotice = PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
 					new MultiOptionDialog("ApplyConfigWindow",
-						"The following configs...",
+						Localizer.Format("#autoLOC_ZUI_ConfigUI_ApplyConfigPretext"),
 						null,
 						HighLogic.UISkin,
 						new Rect(0.5f, 0.5f, windowWidth, -1),

@@ -18,6 +18,7 @@ namespace ZUI {
 		internal const string ZUIHUDREPLACER_RECOLOR_NODE = "ZUIHUDReplacerRecolorConfig"; // ZUIConfig node for hudreplacer recolor
 
 		internal const string ZUICONFIGNAME_VALUE = "name"; // name of ZUIConfig
+		internal const string ZUICONFIGL10NNAME_VALUE = "localizedName"; // localized name of ZUIConfig
 		internal const string ZUICONFIGOPTION_ENABLED_CFG = "enabled"; // enabled ZUIConfigs
 		internal const string ZUICONFIGOPTION_PRIORITY_CFG = "priority";
 		internal const string ZUICONFIGOPTION_REQUIRESCENERELOAD_CFG = "requireSceneReload";
@@ -59,6 +60,7 @@ namespace ZUI {
 
 		// https://stackoverflow.com/a/4489046
 		// https://creativecommons.org/licenses/by-sa/4.0/
+		// unused
 		/// <summary>
 		/// Converts a Camel-case string format into a spaced-out human readable format.
 		/// </summary>

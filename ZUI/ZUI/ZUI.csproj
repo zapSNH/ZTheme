@@ -59,6 +59,7 @@
 
   <ItemGroup>
     <Folder Include="GameData\999_ZUI\Config\" />
+    <Folder Include="GameData\999_ZUI\Localization\" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

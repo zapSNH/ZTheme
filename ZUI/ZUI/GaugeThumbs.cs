@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using KSP.Localization;
 
 namespace ZUI {
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
@@ -27,6 +28,8 @@ namespace ZUI {
 		private Texture2D navballFrameTexture;
 		private string navballFrameOriginalPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg.png";
 		private string navballFrameGaugeThumbsPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg-GaugeThumbs.png";
+
+		private string gForceSuffix = "G";
 
 		public struct ThumbImage {
 			public string name;
@@ -67,6 +70,7 @@ namespace ZUI {
 		}
 
 		public void Start() {
+			gForceSuffix = Localizer.Format("#autoLOC_ZUI_GForceSuffix");
 			throttleGauge = GameObject.Find(Constants.THROTTLE_GAUGE_GOBJ_NAME).GetComponent<ThrottleGauge>();
 			geeGauge = GameObject.Find(Constants.GEE_GAUGE_GOBJ_NAME).GetComponent<GeeGauge>();
 			autopilotModesGObj = GameObject.Find(Constants.AUTOPILOT_MODES_GOBJ_NAME);
@@ -174,7 +178,7 @@ namespace ZUI {
 		}
 		public void Update() {
 			if (throttleThumbObject != null) throttleText.text = Mathf.CeilToInt(throttleGauge.gauge.Value * 100).ToString(); // use ceil to prevent cases where text displays 0 even if throttle is != 0 but > 0.5 
-			if (geeThumbObject != null) geeText.text = Mathf.RoundToInt(geeGauge.gauge.Value).ToString() + "G";
+			if (geeThumbObject != null) geeText.text = Mathf.RoundToInt(geeGauge.gauge.Value).ToString() + gForceSuffix;
 		}
 	}
 }
