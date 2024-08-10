@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace ZUI {
-	public class ThumbDrag : MonoBehaviour, IDragHandler {
+	public class ThumbDrag : MonoBehaviour, IDragHandler, IScrollHandler {
 		private Transform gaugeObject;
 		private RotationalGauge gauge;
+		internal static float scrollAmount = 1f;
 		public void Start() {
 			gaugeObject = transform.parent;
 			gauge = gaugeObject.GetComponent<RotationalGauge>();
@@ -25,6 +26,9 @@ namespace ZUI {
 			float targetAngle = Mathf.Clamp((Mathf.Atan2(gaugeObject.position.y - eventData.position.y, gaugeObject.position.x - eventData.position.x)
 				* Mathf.Rad2Deg), minRot, maxRot);
 			FlightInputHandler.state.mainThrottle = targetAngle.Remap((minRot, maxRot), (1, 0));
+		}
+		public void OnScroll(PointerEventData eventData) {
+			FlightInputHandler.state.mainThrottle += eventData.scrollDelta.y * scrollAmount * 0.01f;
 		}
 	}
 }

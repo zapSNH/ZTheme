@@ -17,6 +17,12 @@ namespace ZUI {
 		private TextMeshProUGUI geeText;
 		private float currentSpacing = 0;
 
+		private float targetMaxRot = -32;
+		private float targetMinRot = 32;
+
+		private float originalMaxRot;
+		private float originalMinRot;
+
 		public struct ThumbImage {
 			public string name;
 			public string path;
@@ -61,10 +67,12 @@ namespace ZUI {
 			autopilotModesGObj = GameObject.Find(Constants.AUTOPILOT_MODES_GOBJ_NAME);
 
 			// set custom constraints
-			throttleGauge.gauge.maxRot = -32;
-			throttleGauge.gauge.minRot = 32;
+			originalMaxRot = throttleGauge.gauge.maxRot;
+			originalMinRot = throttleGauge.gauge.minRot;
 
 			if (ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG]) {
+				throttleGauge.gauge.maxRot = targetMaxRot;
+				throttleGauge.gauge.minRot = targetMinRot;
 				ToggleThrottleThumb(true);
 			}
 			if (ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG]) {
@@ -82,9 +90,13 @@ namespace ZUI {
 				Destroy(throttleThumbObject);
 				autopilotModesGObj.transform.localPosition += new Vector3(currentSpacing, 0, 0);
 				currentSpacing = 0;
+				throttleGauge.gauge.maxRot = originalMaxRot;
+				throttleGauge.gauge.minRot = originalMinRot;
 			}
 			if (active) {
 				throttleThumbObject = CreateGaugeThumb(throttleGauge.gameObject, thumbImage, out throttleText, true);
+				throttleGauge.gauge.maxRot = targetMaxRot;
+				throttleGauge.gauge.minRot = targetMinRot;
 			}
 		}
 		public void ToggleGeeThumb(bool active) {

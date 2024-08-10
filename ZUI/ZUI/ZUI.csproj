@@ -5,6 +5,11 @@
     <BaseOutputPath>bin</BaseOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE;ENABLE_PROFILER</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>D:\Games\Kerbal Space Program\GameData\000_Harmony\0Harmony.dll</HintPath>
@@ -58,6 +63,7 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy $(OutputPath)\*.dll GameData\999_ZUI\" />
+    <Exec Condition="'$(Configuration)' == 'Debug'" Command="copy $(OutputPath)\*.pdb GameData\999_ZUI\" />
   </Target>
 
 </Project>
