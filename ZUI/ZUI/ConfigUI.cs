@@ -62,7 +62,7 @@ namespace ZUI {
 			}
 
 			// attach configs to list
-			DialogGUIScrollList scrollList = new DialogGUIScrollList(Vector2.one,
+			DialogGUIScrollList configsScrollList = new DialogGUIScrollList(Vector2.one,
 				false,
 				true,
 				new DialogGUIVerticalLayout(windowWidth - (2 * paddingWindow) - (2 * paddingXSmall), 64,
@@ -76,11 +76,12 @@ namespace ZUI {
 				ApplyConfigWindow,
 				windowWidth - (2 * paddingRegular), buttonHeight, false);
 
-			configPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset(), TextAnchor.UpperCenter, scrollList, applyButton);
+			configPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset(), TextAnchor.UpperCenter, configsScrollList, applyButton);
 
 			// Other Settings Page
 			// adaptive navball
 			List<DialogGUIBase> settingsSections = new List<DialogGUIBase> {
+				new DialogGUIContentSizer(ContentSizeFitter.FitMode.Unconstrained, ContentSizeFitter.FitMode.PreferredSize, true),
 				CreateSettingsHeader("Adaptive Navball"),
 			};
 			DialogGUIToggle adaptiveNavballToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.ADAPTIVE_NAVBALL_ENABLED_CFG], "Enable adaptive navball", ToggleAdaptiveNavball);
@@ -89,13 +90,25 @@ namespace ZUI {
 
 			settingsSections.Add(CreateSettingsHeader("Navball gauge thumbs"));
 			DialogGUIToggle throttleThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG], "Enable throttle thumb", ToggleThrottleThumb);
+			throttleThumbToggle.tooltipText = "Displays a thumb which shows the current throttle percent next to the throttle gauge";
 			settingsSections.Add(throttleThumbToggle);
-			DialogGUIToggle geeThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], "Enable gee thumb", ToggleGeeThumb);
+			DialogGUIToggle geeThumbToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG], "Enable g-force thumb", ToggleGeeThumb);
+			geeThumbToggle.tooltipText = "Displays a thumb which shows the g-force value next to the g-force gauge";
 			settingsSections.Add(geeThumbToggle);
 			DialogGUIToggle throttleThumbDragToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG], "Allow the throttle thumb to set the throttle", ToggleThrottleThumbDrag);
+			throttleThumbDragToggle.tooltipText = "Allows the throttle thumb to control thr throttle via mouse drag or mouse scroll";
 			settingsSections.Add(throttleThumbDragToggle);
 
-			settingsPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset((int)paddingRegular, (int)paddingRegular, (int)paddingRegular, (int)paddingRegular), TextAnchor.UpperCenter, settingsSections.ToArray());
+			DialogGUIScrollList optionsScrollList = new DialogGUIScrollList(Vector2.one,
+				false,
+				true,
+				new DialogGUIVerticalLayout(windowWidth - (2 * paddingWindow) - (2 * paddingXSmall), 64,
+				paddingXSmall,
+				new RectOffset((int)paddingXSmall, (int)paddingXSmall, (int)paddingXSmall, (int)paddingXSmall),
+				TextAnchor.MiddleLeft,
+				settingsSections.ToArray()));
+
+			settingsPage = new DialogGUIVerticalLayout(true, false, paddingSmall, new RectOffset((int)paddingRegular, (int)paddingRegular, (int)paddingRegular, (int)paddingRegular), TextAnchor.UpperCenter, optionsScrollList);
 
 			// tab buttons
 			DialogGUIToggleButton configTab = new DialogGUIToggleButton(() => currentTab == ZUITab.Configuration,

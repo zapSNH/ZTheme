@@ -1,9 +1,8 @@
 ﻿using KSP.UI.Screens.Flight;
-using SaveUpgradePipeline;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ZUI.GaugeThumbs;
+using System.IO;
 
 namespace ZUI {
 	[KSPAddon(KSPAddon.Startup.Flight, false)]
@@ -11,17 +10,23 @@ namespace ZUI {
 		public static GaugeThumbs Instance { get; private set; }
 
 		private GameObject autopilotModesGObj;
+		private GameObject deltaVGaugeGObj;
 		private ThrottleGauge throttleGauge;
 		private GeeGauge geeGauge;
 		private TextMeshProUGUI throttleText;
 		private TextMeshProUGUI geeText;
-		private float currentSpacing = 0;
+		private float currentSpacingLeft = 0;
+		private float currentSpacingRight = 0;
 
 		private float targetMaxRot = -32;
 		private float targetMinRot = 32;
 
 		private float originalMaxRot;
 		private float originalMinRot;
+
+		private Texture2D navballFrameTexture;
+		private string navballFrameOriginalPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg.png";
+		private string navballFrameGaugeThumbsPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg-GaugeThumbs.png";
 
 		public struct ThumbImage {
 			public string name;
@@ -45,7 +50,7 @@ namespace ZUI {
 		}
 
 		//private static ThumbImage regularDragThumb = new ThumbImage("Regular", Constants.ZUI_FOLDER + "Assets/throttle-thumb", Vector3.zero, new Vector3(-24, 0, 0), Vector3.zero, 28, 128, true);
-		private static ThumbImage compactDragThumb = new ThumbImage("Compact", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.5f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true);
+		private static ThumbImage compactDragThumb = new ThumbImage("Compact", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true);
 		private static ThumbImage compactThumb = new ThumbImage("Compact (no-drag)", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 24, false);
 
 		private GameObject throttleThumbObject = null;
@@ -65,14 +70,19 @@ namespace ZUI {
 			throttleGauge = GameObject.Find(Constants.THROTTLE_GAUGE_GOBJ_NAME).GetComponent<ThrottleGauge>();
 			geeGauge = GameObject.Find(Constants.GEE_GAUGE_GOBJ_NAME).GetComponent<GeeGauge>();
 			autopilotModesGObj = GameObject.Find(Constants.AUTOPILOT_MODES_GOBJ_NAME);
+			deltaVGaugeGObj = GameObject.Find(Constants.DV_GAUGE_GOBJ_NAME);
 
-			// set custom constraints
 			originalMaxRot = throttleGauge.gauge.maxRot;
 			originalMinRot = throttleGauge.gauge.minRot;
 
+			foreach (Texture2D tex in (Texture2D[])(object)Resources.FindObjectsOfTypeAll(typeof(Texture2D))) {
+				if (tex.name == Constants.NAVBALL_FRAME_TEXTURE) {
+					navballFrameTexture = tex;
+					break;
+				}
+			}
+
 			if (ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG]) {
-				throttleGauge.gauge.maxRot = targetMaxRot;
-				throttleGauge.gauge.minRot = targetMinRot;
 				ToggleThrottleThumb(true);
 			}
 			if (ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG]) {
@@ -88,31 +98,39 @@ namespace ZUI {
 			ThumbImage thumbImage = ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] ? compactDragThumb : compactThumb;
 			if (throttleThumbObject != null) {
 				Destroy(throttleThumbObject);
-				autopilotModesGObj.transform.localPosition += new Vector3(currentSpacing, 0, 0);
-				currentSpacing = 0;
+				autopilotModesGObj.transform.localPosition += new Vector3(currentSpacingLeft, 0, 0);
+				currentSpacingLeft = 0;
 				throttleGauge.gauge.maxRot = originalMaxRot;
 				throttleGauge.gauge.minRot = originalMinRot;
 			}
 			if (active) {
-				throttleThumbObject = CreateGaugeThumb(throttleGauge.gameObject, thumbImage, out throttleText, true);
 				throttleGauge.gauge.maxRot = targetMaxRot;
 				throttleGauge.gauge.minRot = targetMinRot;
+				throttleThumbObject = CreateGaugeThumb(throttleGauge.gameObject, thumbImage, out throttleText, leftSide: true);
+				ImageConversion.LoadImage(navballFrameTexture, File.ReadAllBytes(KSPUtil.ApplicationRootPath + navballFrameGaugeThumbsPath));
+			} else {
+				ImageConversion.LoadImage(navballFrameTexture, File.ReadAllBytes(KSPUtil.ApplicationRootPath + navballFrameOriginalPath));
 			}
 		}
 		public void ToggleGeeThumb(bool active) {
 			if (geeThumbObject != null) {
 				Destroy(geeThumbObject);
+				deltaVGaugeGObj.transform.localPosition -= new Vector3(currentSpacingRight, 0, 0);
+				currentSpacingRight = 0;
 			}
 			if (active) {
-				geeThumbObject = CreateGaugeThumb(geeGauge.gameObject, compactThumb, out geeText);
+				geeThumbObject = CreateGaugeThumb(geeGauge.gameObject, compactThumb, out geeText, rightSide: true);
 			}
 		}
 
-		private GameObject CreateGaugeThumb(GameObject gaugeObject, ThumbImage thumbImage, out TextMeshProUGUI gaugeText, bool leftSide = false) {
-			// autopilot modes padding
+		private GameObject CreateGaugeThumb(GameObject gaugeObject, ThumbImage thumbImage, out TextMeshProUGUI gaugeText, bool leftSide = false, bool rightSide = false) {
+			// autopilot modes and dv gauge padding
 			if (leftSide) {
-				currentSpacing = thumbImage.sidePadding;
-				autopilotModesGObj.transform.localPosition -= new Vector3(currentSpacing, 0, 0);
+				currentSpacingLeft = thumbImage.sidePadding;
+				autopilotModesGObj.transform.localPosition -= new Vector3(currentSpacingLeft, 0, 0);
+			} else if (rightSide) {
+				currentSpacingRight = thumbImage.sidePadding + 8;
+				deltaVGaugeGObj.transform.localPosition += new Vector3(currentSpacingRight, 0, 0);
 			}
 
 			// instantiate thumb from gauge
@@ -155,7 +173,7 @@ namespace ZUI {
 			return Sprite.Create(imageTexture, new Rect(0, 0, imageTexture.width, imageTexture.height), new Vector2(0.5f, 0.5f));
 		}
 		public void Update() {
-			if (throttleThumbObject != null) throttleText.text = Mathf.RoundToInt(throttleGauge.gauge.Value * 100).ToString();
+			if (throttleThumbObject != null) throttleText.text = Mathf.CeilToInt(throttleGauge.gauge.Value * 100).ToString(); // use ceil to prevent cases where text displays 0 even if throttle is != 0 but > 0.5 
 			if (geeThumbObject != null) geeText.text = Mathf.RoundToInt(geeGauge.gauge.Value).ToString() + "G";
 		}
 	}

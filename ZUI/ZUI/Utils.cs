@@ -44,12 +44,14 @@ namespace ZUI {
 		internal const string NAVBALL_TEXTURE = "NavBall";
 
 		internal const string AUTOPILOT_MODES_GOBJ_NAME = "AutopilotModes";
+		internal const string DV_GAUGE_GOBJ_NAME = "DeltaVGauge";
 		internal const string THROTTLE_GAUGE_GOBJ_NAME = "ThrottleGaugePointer";
 		internal const string GEE_GAUGE_GOBJ_NAME = "GeeGaugePointer";
 
 		internal const string GEE_THUMB_ENABLED_CFG = "enableGeeThumb";
 		internal const string THROTTLE_THUMB_ENABLED_CFG = "enableThrottleThumb";
 		internal const string THROTTLE_THUMB_DRAG_ENABLED_CFG = "enableThrottleThumbDragging";
+		internal const string NAVBALL_FRAME_TEXTURE = "NavBall_BG_Baked";
 
 		internal const string TOOLBAR_BUTTON_ENABLED = "toolbarButtonEnabled";
 	}
