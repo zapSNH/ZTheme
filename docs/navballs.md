@@ -1,6 +1,7 @@
+---
 layout: page
 title: "ZTheme | about:navballs"
-permalink: /navballs
+---
 
 The pre-alpha KSP2 style navball in the screenshot(s) is not included in this theme but is instead [@Squeaky's navball](https://forum.kerbalspaceprogram.com/topic/200741-112x-navballtexturechanger-updated-now-with-ui/?do=findComment&comment=4290196). There are also many more navballs that look nice with (or without) this theme.
 
