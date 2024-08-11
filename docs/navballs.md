@@ -1,9 +1,12 @@
-The pre-alpha KSP2 style navball in the screenshot(s) is not included in this theme but is instead @Squeaky's navball. There are also many more navballs that look nice with (or without) this theme.
+The pre-alpha KSP2 style navball in the screenshot(s) is not included in this theme but is instead [@Squeaky's navball](https://forum.kerbalspaceprogram.com/topic/200741-112x-navballtexturechanger-updated-now-with-ui/?do=findComment&comment=4290196). There are also many more navballs that look nice with (or without) this theme.
 
 There are three ways of changing the navball
 
 In these examples, I'll be using the Principia navball, which looks pretty nice with this theme (and others maybe).
+
 ![image](https://github.com/user-attachments/assets/b7079633-b654-49aa-9d08-e90841c62dd5)
+
+* * *
 
 ## 1 - Using [NavBallTextureChanger Updated](https://forum.kerbalspaceprogram.com/topic/200741-112x-navballtexturechanger-updated-now-with-ui/)
 
@@ -41,6 +44,7 @@ Make sure the file ends with `.cfg`
 
 You're done!
  
+* * *
 
 ## 2 - Using HUDReplacer
 This method does not need any more mods as HUDReplacer is a dependency of ZTheme.
@@ -52,6 +56,8 @@ This method is much simpler than method 1.
 
 If all goes well then you should see your magnificent navball that replaces the stinky old one.
  
+
+* * *
 
 ## 3 - Using ZUI
 If you want your navball to be adaptive just like KSP 2, then you can use ZUI, a supplementary plugin for ZTheme.
