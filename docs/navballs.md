@@ -3,21 +3,23 @@ The pre-alpha KSP2 style navball in the screenshot(s) is not included in this th
 There are three ways of changing the navball
 
 In these examples, I'll be using the Principia navball, which looks pretty nice with this theme (and others maybe).
+![image](https://github.com/user-attachments/assets/b7079633-b654-49aa-9d08-e90841c62dd5)
 
-## 1 - Using NavBallTextureChanger Updated
+## 1 - Using [NavBallTextureChanger Updated](https://forum.kerbalspaceprogram.com/topic/200741-112x-navballtexturechanger-updated-now-with-ui/)
 
-NavBallTextureChanger Updated is a mod for KSP which... well... changes the navball texture.
+[NavBallTextureChanger Updated](https://forum.kerbalspaceprogram.com/topic/200741-112x-navballtexturechanger-updated-now-with-ui/) is a mod for KSP which... well... changes the navball texture.
+
 You can change the navball pretty easily in the UI with this mod.
 
-I. Install NavBallTextureChanger Updated
+### I. Install [NavBallTextureChanger Updated](https://forum.kerbalspaceprogram.com/topic/200741-112x-navballtexturechanger-updated-now-with-ui/)
 Installing NBTCU is pretty similar to installing ZTheme.
 You can use CKAN or you can manually install it like ZTheme.
 
-II. Copy the texture into GameData/NavBallTextureChanger/PluginData/Skins
+### II. Copy the texture into GameData/NavBallTextureChanger/PluginData/Skins
 I recommend to also copy the navball twice and naming one navballName_em.png if you want to create emissives for it.
 
-III.  Create the config file
-Here's an example of what a config file looks like. If you're using the Principia navball then this should automatically work if you named the navballs navball_compass.png & navball_compass_em.png
+### III.  Create the config file
+Here's an example of what a config file looks like. This should automatically work if you named the navballs navball_compass.png & navball_compass_em.png
 
 ```cs
 NavballTextureChanger
@@ -33,9 +35,9 @@ NavballTextureChanger
 
 Place the config file in the same folder as the navball texture. (this doesn't affect the functionality but is good for organization)
 
- Make sure the file ends with .cfg
+Make sure the file ends with `.cfg`
 
-IV. Launch KSP and change the navball through the toolbar icon.
+### IV. Launch KSP and change the navball through the toolbar icon.
 
 You're done!
  
@@ -45,7 +47,7 @@ This method does not need any more mods as HUDReplacer is a dependency of ZTheme
 
 This method is much simpler than method 1.
 
-I. Copy your texture to GameData/ZTheme/PluginData/UI and rename it to NavBall.png
+### I. Copy your texture to GameData/ZTheme/PluginData/UI and rename it to NavBall.png
 ...and you're done!
 
 If all goes well then you should see your magnificent navball that replaces the stinky old one.
@@ -55,7 +57,7 @@ If all goes well then you should see your magnificent navball that replaces the 
 If you want your navball to be adaptive just like KSP 2, then you can use ZUI, a supplementary plugin for ZTheme.
 Note: ZUI does other thing(s) too, not just an adaptive navball.
 
-I. Install ZUI
+### I. Install ZUI
 Installing ZUI is identical to installing ZTheme manually.
 ZUI isn't currently available in CKAN because I'd like to add some more stuff before adding it to CKAN.
 
