@@ -178,7 +178,7 @@ namespace ZUI {
 		}
 		public void Update() {
 			if (throttleThumbObject != null) throttleText.text = Mathf.CeilToInt(throttleGauge.gauge.Value * 100).ToString(); // use ceil to prevent cases where text displays 0 even if throttle is != 0 but > 0.5 
-			if (geeThumbObject != null) geeText.text = Mathf.RoundToInt(geeGauge.gauge.Value).ToString() + gForceSuffix;
+			if (geeThumbObject != null) geeText.text = Mathf.RoundToInt((float)FlightGlobals.ActiveVessel.geeForce).ToString() + gForceSuffix;
 		}
 	}
 }
