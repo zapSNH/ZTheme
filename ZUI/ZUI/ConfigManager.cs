@@ -108,6 +108,12 @@ namespace ZUI {
 		}
 		internal static void SetConfigs() {
 			currentConfigNodes.Clear();
+			try {
+				HUDReplacer.HUDReplacer.additionalConfigNodes.Clear();
+			} catch {
+				Debug.Log($"[ZUI] HUDReplacer unsupported.");
+				return;
+			}
 			HUDReplacer.HUDReplacer.additionalConfigNodes.Clear();
 			HUDReplacer.HUDReplacer.additionalRecolorNodes.Clear();
 			foreach (ZUIConfig config in enabledConfigs) { 
