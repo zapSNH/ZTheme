@@ -3,7 +3,7 @@
 
 A (cool and) dark KSP UI based on HUDReplacer's example theme
 
-Check out [Naztheme](codeberg.org/Nazalassa/Naztheme) for a retro dark KSP theme!
+Check out [Naztheme](http://codeberg.org/Nazalassa/Naztheme) for a retro dark KSP theme!
 [![very neat](https://github.com/zapSNH/ZTheme-Files/blob/main/banner.png?raw=true "very neat")](https://github.com/zapSNH/ZTheme-Files/blob/main/banner.png?raw=true "very neat")
 navball not included
 
