@@ -40,7 +40,8 @@ namespace ZUI {
 			public float fontSize;
 			public float sidePadding;
 			public bool draggable;
-			public ThumbImage(string name, string path, Vector3 thumbPosition, Vector3 textPosition, Vector3 textRotation, float fontSize, float sidePadding, bool draggable) {
+			public float thumbScale;
+			public ThumbImage(string name, string path, Vector3 thumbPosition, Vector3 textPosition, Vector3 textRotation, float fontSize, float sidePadding, bool draggable, float thumbScale) {
 				this.name = name;
 				this.path = path;
 				this.thumbPosition = thumbPosition;
@@ -49,17 +50,19 @@ namespace ZUI {
 				this.fontSize = fontSize;
 				this.sidePadding = sidePadding;
 				this.draggable = draggable;
+				this.thumbScale = thumbScale;
 			}
 		}
 
-		//private static ThumbImage regularDragThumb = new ThumbImage("Regular", Constants.ZUI_FOLDER + "Assets/throttle-thumb", Vector3.zero, new Vector3(-24, 0, 0), Vector3.zero, 28, 128, true);
-		private static ThumbImage compactDragThumb = new ThumbImage("Compact", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true);
-		private static ThumbImage compactThumb = new ThumbImage("Compact (no-drag)", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 24, false);
+		//private static ThumbImage regularDragThumb = new ThumbImage("Regular", Constants.ZUI_FOLDER + "Assets/throttle-thumb", Vector3.zero, new Vector3(-24, 0, 0), Vector3.zero, 28, 128, true, 1.3f);
+		private static ThumbImage compactDragThumb = new ThumbImage("CompactDraggable", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true, 1.3f);
+		private static ThumbImage compactThumb = new ThumbImage("Compact", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 24, false, 1.3f);
+		// nice variable names, loser.
+		private static ThumbImage compactDragThumbEmbed = new ThumbImage("CompactDraggableEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 12, true, 1f);
+		private static ThumbImage compactThumbEmbed = new ThumbImage("CompactEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 8, false, 1f);
 
 		private GameObject throttleThumbObject = null;
 		private GameObject geeThumbObject = null;
-
-		private float thumbScale = 1.3f;
 
 		public void Awake() {
 			if (Instance == null || Instance == this) {
@@ -139,7 +142,7 @@ namespace ZUI {
 
 			// instantiate thumb from gauge
 			GameObject gaugeThumb = Instantiate(gaugeObject, gaugeObject.transform.parent);
-			gaugeThumb.transform.localScale = new Vector3(thumbScale, thumbScale, 1);
+			gaugeThumb.transform.localScale = new Vector3(thumbImage.thumbScale, thumbImage.thumbScale, 1);
 
 			// thumb visual
 			GameObject gaugeThumbVisual = gaugeThumb.transform.GetChild(0).gameObject;
@@ -148,7 +151,7 @@ namespace ZUI {
 			gaugeThumbVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(thumbSprite.texture.width, thumbSprite.texture.height);
 			
 			gaugeThumbVisual.transform.localPosition += thumbImage.thumbPosition;
-			gaugeThumbVisual.transform.localScale /= thumbScale;
+			gaugeThumbVisual.transform.localScale /= thumbImage.thumbScale;
 
 			// dragging
 			if (thumbImage.draggable) {

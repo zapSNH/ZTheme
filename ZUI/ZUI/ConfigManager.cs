@@ -19,7 +19,7 @@ namespace ZUI {
 		internal static Dictionary<string, bool> options = new Dictionary<string, bool>();
 
 		public void Awake() {
-			if (Instance == null || Instance == this) {
+			if (Instance == null) {
 				Instance = this;
 				DontDestroyOnLoad(gameObject);
 			} else {
@@ -108,27 +108,23 @@ namespace ZUI {
 		}
 		internal static void SetConfigs() {
 			currentConfigNodes.Clear();
-			try {
-				HUDReplacer.HUDReplacer.additionalConfigNodes.Clear();
-			} catch {
-				Debug.Log($"[ZUI] HUDReplacer unsupported.");
-				return;
-			}
-			HUDReplacer.HUDReplacer.additionalConfigNodes.Clear();
-			HUDReplacer.HUDReplacer.additionalRecolorNodes.Clear();
-			foreach (ZUIConfig config in enabledConfigs) { 
+			foreach (ZUIConfig config in enabledConfigs) {
 				AddConfig(config);
 			}
-			foreach (ConfigNode configNode in currentConfigNodes) {
-				if (configNode.name == Constants.HUDREPLACER_NODE) {
-					HUDReplacer.HUDReplacer.additionalConfigNodes.Add(configNode);
-				} else if (configNode.name == Constants.HUDREPLACER_RECOLOR_NODE) {
-					HUDReplacer.HUDReplacer.additionalRecolorNodes.Add(configNode);
+			if (Constants.ENABLE_HUDREPLACER_FUNCTIONALITY) {
+				HUDReplacer.HUDReplacer.additionalConfigNodes.Clear();
+				HUDReplacer.HUDReplacer.additionalRecolorNodes.Clear();
+				foreach (ConfigNode configNode in currentConfigNodes) {
+					if (configNode.name == Constants.HUDREPLACER_NODE) {
+						HUDReplacer.HUDReplacer.additionalConfigNodes.Add(configNode);
+					} else if (configNode.name == Constants.HUDREPLACER_RECOLOR_NODE) {
+						HUDReplacer.HUDReplacer.additionalRecolorNodes.Add(configNode);
+					}
 				}
-			}
-			if (HUDReplacer.HUDReplacer.Instance != null) {
-				HUDReplacer.HUDReplacer.Instance.GetTextures();
-				HUDReplacer.HUDReplacer.Instance.ReplaceTextures();
+				if (HUDReplacer.HUDReplacer.Instance != null) {
+					HUDReplacer.HUDReplacer.Instance.GetTextures();
+					HUDReplacer.HUDReplacer.Instance.ReplaceTextures();
+				}
 			}
 		}
 		internal static void SaveConfigOverrides() {

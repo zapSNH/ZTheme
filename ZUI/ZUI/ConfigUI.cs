@@ -17,7 +17,7 @@ namespace ZUI {
 			OtherSettings
 		}
 
-		internal static ZUITab currentTab = ZUITab.Configuration;
+		internal static ZUITab currentTab = ZUITab.OtherSettings;
 
 		private static float windowWidth = 250;
 		private static float windowHeight = 250;
@@ -51,15 +51,18 @@ namespace ZUI {
 			List<DialogGUIBase> buttons = new List<DialogGUIBase>();
 			List<ZUIConfig> configs = ConfigManager.GetConfigs();
 			buttons.Add(new DialogGUIContentSizer(ContentSizeFitter.FitMode.Unconstrained, ContentSizeFitter.FitMode.PreferredSize, true));
-			foreach (ZUIConfig config in configs) {
-				Debug.Log("[ZUI] " + config.name + ": " + ConfigManager.GetEnabledConfigs().Contains(config));
-				DialogGUIToggleButton button = new DialogGUIToggleButton(ConfigManager.GetEnabledConfigs().Contains(config),
-					config.localizedName,
-					delegate (bool selected) {
-						ToggleConfig(selected, config);
-					},
-					windowWidth - (2 * paddingWindow) - (2 * paddingXSmall), buttonHeight);
-				buttons.Add(button);
+
+			if (Constants.ENABLE_HUDREPLACER_FUNCTIONALITY) {
+				foreach (ZUIConfig config in configs) {
+					Debug.Log("[ZUI] " + config.name + ": " + ConfigManager.GetEnabledConfigs().Contains(config));
+					DialogGUIToggleButton button = new DialogGUIToggleButton(ConfigManager.GetEnabledConfigs().Contains(config),
+						config.localizedName,
+						delegate (bool selected) {
+							ToggleConfig(selected, config);
+						},
+						windowWidth - (2 * paddingWindow) - (2 * paddingXSmall), buttonHeight);
+					buttons.Add(button);
+				}
 			}
 
 			// attach configs to list
@@ -141,6 +144,13 @@ namespace ZUI {
 					new Rect(0.5f, 0.5f, windowWidth, windowHeight),
 					new DialogGUIBase[] { tabContainer, configPageBox, settingsPageBox } ),
 				false, HighLogic.UISkin, false);
+			if (!Constants.ENABLE_HUDREPLACER_FUNCTIONALITY) {
+				// make it 'inactive'
+				// idk (and idc) if this isn't how you're supposed to do it
+				CanvasGroup canvasGroup = configTab.toggle.gameObject.AddComponent<CanvasGroup>();
+				canvasGroup.alpha = 0.5f;
+				canvasGroup.interactable = false;
+			}
 		}
 		private static void ToggleConfig(bool selected, ZUIConfig config) {
 			Debug.Log($"[ZUI] toggling {config.name} to {selected}");

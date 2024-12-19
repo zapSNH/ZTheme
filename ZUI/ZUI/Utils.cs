@@ -6,6 +6,8 @@ namespace ZUI {
 		internal const string ZUI_FOLDER = "999_ZUI/";
 		internal const string MOD_FOLDER = GAMEDATA_FOLDER + ZUI_FOLDER;
 
+		internal const bool ENABLE_HUDREPLACER_FUNCTIONALITY = false;
+
 		internal const string DEBUG_CFG = "debugMode";
 
 		internal const string ZUI_NODE = "ZUI"; // main node
