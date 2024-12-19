@@ -19,8 +19,10 @@ namespace ZUI {
 		private float currentSpacingLeft = 0;
 		private float currentSpacingRight = 0;
 
-		private float originalMaxRot;
-		private float originalMinRot;
+		private float originalThrottleGaugeMaxRot;
+		private float originalThrottleGaugeMinRot;
+		private float originalGeeGaugeMaxRot;
+		private float originalGeeGaugeMinRot;
 
 		private Texture2D navballFrameTexture;
 		private string navballFrameOriginalPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg.png";
@@ -60,8 +62,8 @@ namespace ZUI {
 		private static ThumbImage compactDragThumb = new ThumbImage("CompactDraggable", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true, 1.3f, -32, 32);
 		private static ThumbImage compactThumb = new ThumbImage("Compact", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 24, false, 1.3f, -32, 32);
 		// nice variable names, loser.
-		private static ThumbImage compactDragThumbEmbed = new ThumbImage("CompactDraggableEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 0, true, 1.015f, -32, 48);
-		private static ThumbImage compactThumbEmbed = new ThumbImage("CompactEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 0, false, 1f, -32, 48);
+		private static ThumbImage compactDragThumbEmbed = new ThumbImage("CompactDraggableEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 0, true, 1f, -32, 48);
+		private static ThumbImage compactThumbEmbed = new ThumbImage("CompactEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 0, false, 1.015f, -32, 48);
 
 		private GameObject throttleThumbObject = null;
 		private GameObject geeThumbObject = null;
@@ -81,8 +83,11 @@ namespace ZUI {
 			autopilotModesGObj = GameObject.Find(Constants.AUTOPILOT_MODES_GOBJ_NAME);
 			deltaVGaugeGObj = GameObject.Find(Constants.DV_GAUGE_GOBJ_NAME);
 
-			originalMaxRot = throttleGauge.gauge.maxRot;
-			originalMinRot = throttleGauge.gauge.minRot;
+			originalThrottleGaugeMaxRot = throttleGauge.gauge.maxRot;
+			originalThrottleGaugeMinRot = throttleGauge.gauge.minRot;
+
+			originalGeeGaugeMaxRot = geeGauge.gauge.maxRot;
+			originalGeeGaugeMinRot = geeGauge.gauge.minRot;
 
 			foreach (Texture2D tex in (Texture2D[])(object)Resources.FindObjectsOfTypeAll(typeof(Texture2D))) {
 				if (tex.name == Constants.NAVBALL_FRAME_TEXTURE) {
@@ -105,6 +110,7 @@ namespace ZUI {
 		public void SetThrottleThumbEmbed(bool embedded) {
 			ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG] = embedded;
 			if (ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG]) ToggleThrottleThumb(true);
+			if (ConfigManager.options[Constants.GEE_THUMB_ENABLED_CFG]) ToggleGeeThumb(true);
 		}
 
 		public void ToggleThrottleThumb(bool active) {
@@ -127,8 +133,8 @@ namespace ZUI {
 				Destroy(throttleThumbObject);
 				autopilotModesGObj.transform.localPosition += new Vector3(currentSpacingLeft, 0, 0);
 				currentSpacingLeft = 0;
-				throttleGauge.gauge.maxRot = originalMaxRot;
-				throttleGauge.gauge.minRot = originalMinRot;
+				throttleGauge.gauge.maxRot = originalThrottleGaugeMaxRot;
+				throttleGauge.gauge.minRot = originalThrottleGaugeMinRot;
 			}
 			if (active) {
 				throttleGauge.gauge.maxRot = thumbImage.targetMaxRot;
@@ -151,8 +157,12 @@ namespace ZUI {
 			}
 			if (active) {
 				if (ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG]) {
+					geeGauge.gauge.maxRot = 32f;
+					geeGauge.gauge.minRot = -76f;
 					geeThumbObject = CreateGaugeThumb(geeGauge.gameObject, compactThumbEmbed, out geeText, rightSide: true);
 				} else {
+					geeGauge.gauge.maxRot = originalGeeGaugeMaxRot;
+					geeGauge.gauge.minRot = originalGeeGaugeMinRot;
 					geeThumbObject = CreateGaugeThumb(geeGauge.gameObject, compactThumb, out geeText, rightSide: true);
 				}
 			}
