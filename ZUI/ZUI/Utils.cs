@@ -54,6 +54,7 @@ namespace ZUI {
 		internal const string GEE_THUMB_ENABLED_CFG = "enableGeeThumb";
 		internal const string THROTTLE_THUMB_ENABLED_CFG = "enableThrottleThumb";
 		internal const string THROTTLE_THUMB_DRAG_ENABLED_CFG = "enableThrottleThumbDragging";
+		internal const string THROTTLE_THUMB_EMBED_CFG = "throttleThumbReplacesPointer";
 		internal const string NAVBALL_FRAME_TEXTURE = "NavBall_BG_Baked";
 
 		internal const string TOOLBAR_BUTTON_ENABLED = "toolbarButtonEnabled";

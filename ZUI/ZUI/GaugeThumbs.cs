@@ -19,15 +19,13 @@ namespace ZUI {
 		private float currentSpacingLeft = 0;
 		private float currentSpacingRight = 0;
 
-		private float targetMaxRot = -32;
-		private float targetMinRot = 32;
-
 		private float originalMaxRot;
 		private float originalMinRot;
 
 		private Texture2D navballFrameTexture;
 		private string navballFrameOriginalPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg.png";
 		private string navballFrameGaugeThumbsPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg-GaugeThumbs.png";
+		private string navballFrameGaugeThumbsEmbeddedPath = Constants.MOD_FOLDER + "PluginData/NavBall-Bg-FullGauge.png";
 
 		private string gForceSuffix = "G";
 
@@ -41,7 +39,9 @@ namespace ZUI {
 			public float sidePadding;
 			public bool draggable;
 			public float thumbScale;
-			public ThumbImage(string name, string path, Vector3 thumbPosition, Vector3 textPosition, Vector3 textRotation, float fontSize, float sidePadding, bool draggable, float thumbScale) {
+			public float targetMaxRot;
+			public float targetMinRot;
+			public ThumbImage(string name, string path, Vector3 thumbPosition, Vector3 textPosition, Vector3 textRotation, float fontSize, float sidePadding, bool draggable, float thumbScale, float targetMaxRot, float targetMinRot) {
 				this.name = name;
 				this.path = path;
 				this.thumbPosition = thumbPosition;
@@ -51,15 +51,17 @@ namespace ZUI {
 				this.sidePadding = sidePadding;
 				this.draggable = draggable;
 				this.thumbScale = thumbScale;
+				this.targetMaxRot = targetMaxRot;
+				this.targetMinRot = targetMinRot;
 			}
 		}
 
 		//private static ThumbImage regularDragThumb = new ThumbImage("Regular", Constants.ZUI_FOLDER + "Assets/throttle-thumb", Vector3.zero, new Vector3(-24, 0, 0), Vector3.zero, 28, 128, true, 1.3f);
-		private static ThumbImage compactDragThumb = new ThumbImage("CompactDraggable", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true, 1.3f);
-		private static ThumbImage compactThumb = new ThumbImage("Compact", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 24, false, 1.3f);
+		private static ThumbImage compactDragThumb = new ThumbImage("CompactDraggable", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 32, true, 1.3f, -32, 32);
+		private static ThumbImage compactThumb = new ThumbImage("Compact", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 24, false, 1.3f, -32, 32);
 		// nice variable names, loser.
-		private static ThumbImage compactDragThumbEmbed = new ThumbImage("CompactDraggableEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 12, true, 1f);
-		private static ThumbImage compactThumbEmbed = new ThumbImage("CompactEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 8, false, 1f);
+		private static ThumbImage compactDragThumbEmbed = new ThumbImage("CompactDraggableEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact-draggable", new Vector3(-2.25f, 0, 0), new Vector3(4, 0, 0), new Vector3(0, 0, 90), 14, 0, true, 1.015f, -32, 48);
+		private static ThumbImage compactThumbEmbed = new ThumbImage("CompactEmbedded", Constants.ZUI_FOLDER + "Assets/throttle-thumb-compact", Vector3.zero, Vector3.zero, new Vector3(0, 0, 90), 14, 0, false, 1f, -32, 48);
 
 		private GameObject throttleThumbObject = null;
 		private GameObject geeThumbObject = null;
@@ -100,9 +102,27 @@ namespace ZUI {
 			ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] = draggable;
 			if (ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG]) ToggleThrottleThumb(true);
 		}
+		public void SetThrottleThumbEmbed(bool embedded) {
+			ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG] = embedded;
+			if (ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG]) ToggleThrottleThumb(true);
+		}
 
 		public void ToggleThrottleThumb(bool active) {
-			ThumbImage thumbImage = ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] ? compactDragThumb : compactThumb;
+			// horrible setup, *might* fix later
+			ThumbImage thumbImage;
+			if (ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG]) {
+				if (ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG]) {
+					thumbImage = compactDragThumbEmbed;
+				} else {
+					thumbImage = compactDragThumb;
+				}
+			} else {
+				if (ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG]) {
+					thumbImage = compactThumbEmbed;
+				} else {
+					thumbImage = compactThumb;
+				}
+			}
 			if (throttleThumbObject != null) {
 				Destroy(throttleThumbObject);
 				autopilotModesGObj.transform.localPosition += new Vector3(currentSpacingLeft, 0, 0);
@@ -111,10 +131,14 @@ namespace ZUI {
 				throttleGauge.gauge.minRot = originalMinRot;
 			}
 			if (active) {
-				throttleGauge.gauge.maxRot = targetMaxRot;
-				throttleGauge.gauge.minRot = targetMinRot;
+				throttleGauge.gauge.maxRot = thumbImage.targetMaxRot;
+				throttleGauge.gauge.minRot = thumbImage.targetMinRot;
 				throttleThumbObject = CreateGaugeThumb(throttleGauge.gameObject, thumbImage, out throttleText, leftSide: true);
-				ImageConversion.LoadImage(navballFrameTexture, File.ReadAllBytes(KSPUtil.ApplicationRootPath + navballFrameGaugeThumbsPath));
+				if (ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG]) {
+					ImageConversion.LoadImage(navballFrameTexture, File.ReadAllBytes(KSPUtil.ApplicationRootPath + navballFrameGaugeThumbsEmbeddedPath));
+				} else {
+					ImageConversion.LoadImage(navballFrameTexture, File.ReadAllBytes(KSPUtil.ApplicationRootPath + navballFrameGaugeThumbsPath));
+				}
 			} else {
 				ImageConversion.LoadImage(navballFrameTexture, File.ReadAllBytes(KSPUtil.ApplicationRootPath + navballFrameOriginalPath));
 			}
@@ -126,7 +150,11 @@ namespace ZUI {
 				currentSpacingRight = 0;
 			}
 			if (active) {
-				geeThumbObject = CreateGaugeThumb(geeGauge.gameObject, compactThumb, out geeText, rightSide: true);
+				if (ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG]) {
+					geeThumbObject = CreateGaugeThumb(geeGauge.gameObject, compactThumbEmbed, out geeText, rightSide: true);
+				} else {
+					geeThumbObject = CreateGaugeThumb(geeGauge.gameObject, compactThumb, out geeText, rightSide: true);
+				}
 			}
 		}
 

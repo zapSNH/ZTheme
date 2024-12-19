@@ -102,6 +102,9 @@ namespace ZUI {
 			DialogGUIToggle throttleThumbDragToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG], Localizer.Format("#autoLOC_ZUI_ConfigUI_AllowThrottleThumbDrag"), ToggleThrottleThumbDrag);
 			throttleThumbDragToggle.tooltipText = Localizer.Format("#autoLOC_ZUI_ConfigUI_AllowThrottleThumbDrag_tooltip");
 			settingsSections.Add(throttleThumbDragToggle);
+			DialogGUIToggle throttleEmbedToggle = new DialogGUIToggle(() => ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG], Localizer.Format("#autoLOC_ZUI_ConfigUI_EmbedThrottleThumb"), ToggleThrottleEmbed);
+			throttleThumbDragToggle.tooltipText = Localizer.Format("#autoLOC_ZUI_ConfigUI_EmbedThrottleThumb_tooltip");
+			settingsSections.Add(throttleEmbedToggle);
 
 			DialogGUIScrollList optionsScrollList = new DialogGUIScrollList(Vector2.one,
 				false,
@@ -172,6 +175,7 @@ namespace ZUI {
 			}
 			ConfigManager.SaveConfigOverrides();
 		}
+		// RAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 		private static void ToggleThrottleThumb(bool active) {
 			ConfigManager.options[Constants.THROTTLE_THUMB_ENABLED_CFG] = active;
 			if (GaugeThumbs.Instance != null) GaugeThumbs.Instance.ToggleThrottleThumb(active);
@@ -185,6 +189,11 @@ namespace ZUI {
 		private static void ToggleThrottleThumbDrag(bool active) {
 			ConfigManager.options[Constants.THROTTLE_THUMB_DRAG_ENABLED_CFG] = active;
 			if (GaugeThumbs.Instance != null) GaugeThumbs.Instance.SetThrottleThumbDrag(active);
+			ConfigManager.SaveConfigOverrides();
+		}
+		private static void ToggleThrottleEmbed(bool active) {
+			ConfigManager.options[Constants.THROTTLE_THUMB_EMBED_CFG] = active;
+			if (GaugeThumbs.Instance != null) GaugeThumbs.Instance.SetThrottleThumbEmbed(active);
 			ConfigManager.SaveConfigOverrides();
 		}
 		private static void ApplyConfigWindow() {
