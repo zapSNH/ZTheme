@@ -1,3 +1,9 @@
+<div align="center">
+ <img src="https://github.com/user-attachments/assets/04822bc7-f4c8-4104-b852-588ad48847e9">
+ <br>
+ <i>;)</i>
+</div>
+
 # ZTheme (pronounced zed-theme)
 ![Current Release](https://img.shields.io/github/v/release/zapSNH/ZTheme)
 
