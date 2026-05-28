@@ -19,7 +19,8 @@ navball not included
 ## Dependencies
 [HUDReplacer](https://github.com/KSPModStewards/HUDReplacer/releases "HUDReplacer") + its dependencies (currently only [Harmony](https://github.com/KSPModdingLibs/HarmonyKSP/releases "Harmony"))
 
-[Module Manager](https://github.com/sarbian/ModuleManager "Module Manager")
+Module Manager
+([MM sarbian](https://github.com/sarbian/ModuleManager "Original Module Manager") | [MM/L](https://github.com/KSP-ModularManagement/ModuleManager "Newer fork of ModuleManager"))
 
 ## Known Issues
  - Some textures are missing icons [#1](https://github.com/zapSNH/ZTheme/issues/1 "#1")
