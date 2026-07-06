@@ -4,7 +4,7 @@
 A (cool and) dark KSP UI based on HUDReplacer's example theme
 
 Check out [Naztheme](http://codeberg.org/Nazalassa/Naztheme) for a retro dark KSP theme!
-[![very neat](https://github.com/zapSNH/ZTheme-Files/blob/main/banner.png?raw=true "very neat")](https://github.com/zapSNH/ZTheme-Files/blob/main/banner.png?raw=true "very neat")
+[![very neat](https://i.imgur.com/LnZeEs9.png "horrible theme only for gremlins")](https://i.imgur.com/LnZeEs9.png "wonderful theme only for aliens")
 navball not included
 
 ### More info
