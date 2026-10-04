@@ -42,5 +42,13 @@ MrF0X and beik for being inspiration
 
 You for reading this README
 
-## Licensing
-GNU GPL v3.0
+## Licensing and a Plea
+GNU GPL v3.0 [ZTheme and ZUI]
+
+While the project may be under GPLv3, pretty (or ugly) please do not feed it into AI for slop making purposes. Especially for ZTheme.
+
+I may have been [guilty](https://github.com/zapSNH/ZTheme/blob/81725045f6b6fda3f02f98961975c58c4903651e/ZUI/ZUI/Transformer.cs#L5) (gee thanks visual studio) of a little bit of these shenanigans in the past, but don't do what I did haha. I'd rather not dehydrate to dehydration.
+
+You are entirely free to ignore this section if you wish. 
+
+I'd rather wash, tho.
